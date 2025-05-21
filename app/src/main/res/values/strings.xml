@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Bussing</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="client_id">216430528785-s4qqq10c0mi4di9ocg14ivodek8gdesm.apps.googleusercontent.com</string>
+
+    <string-array name="departure">
+        <item>Bulacan</item>
+        <item>Cubao</item>
+        <item>Divisoria</item>
+        <item>Ermita</item>
+        <item>Santolan</item>
+        <item>PITX</item>
+    </string-array>
+
+    <string-array name="arrival">
+        <item>Bulacan</item>
+        <item>Cubao</item>
+        <item>Divisoria</item>
+        <item>Ermita</item>
+        <item>Santolan</item>
+        <item>PITX</item>
+    </string-array>
+
+    <string-array name="passengers">
+        <item>Regular</item>
+        <item>Student</item>
+        <item>Senior</item>
+        <item>PWD</item>
+    </string-array>
+
+</resources>

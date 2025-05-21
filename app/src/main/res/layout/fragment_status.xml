@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient3"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.status.StatusFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/account_bg"/>
+
+    <TextView
+        android:id="@+id/textHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bus"
+        android:gravity="start"
+        android:textSize="38dp"
+        android:fontFamily="@font/nunito_bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#f9f9f9"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Schedule"
+        android:gravity="start"
+        android:textSize="38dp"
+        android:fontFamily="@font/nunito_bold"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#f9f9f9"/>
+
+
+    <!--    <Button-->
+    <!--        android:id="@+id/spinnerButton"-->
+    <!--        android:layout_width="20dp"-->
+    <!--        android:layout_height="20dp"-->
+    <!--        android:background="@drawable/filter_solid"-->
+    <!--        android:layout_gravity="end"-->
+    <!--        android:layout_marginTop="130dp"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        />-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_marginTop="180dp"
+        android:nestedScrollingEnabled="false" />
+
+    <!--    <ImageView-->
+    <!--        android:layout_width="245dp"-->
+    <!--        android:layout_height="170dp"-->
+    <!--        android:background="@drawable/search"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:layout_marginTop="20dp"/>-->
+
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Oops! No Bus Status available now"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:layout_marginTop="140dp"-->
+    <!--        android:fontFamily="@font/nunito_bold"-->
+    <!--        android:textSize="22dp"-->
+    <!--        android:textColor="#333333"/>-->
+
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Bus status will appear here."-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:layout_marginTop="170dp"-->
+    <!--        android:textSize="14dp"-->
+    <!--        android:textColor="#1D9793"-->
+    <!--        android:fontFamily="@font/nunito_semibold"/>-->
+
+</FrameLayout>

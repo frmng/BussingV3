@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f9f9f9"
+    android:id="@+id/fragment_ticket"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.ticket.TicketFragment">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="1000dp"
+            android:layout_height="360dp"
+            android:background="@drawable/maps"
+            android:scaleType="centerCrop" />
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="800dp"
+            android:layout_marginTop="160dp"
+            app:cardCornerRadius="28dp"
+            android:backgroundTint="#f9f9f9"
+            android:elevation="100dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#333333"
+                    android:text="Join the Adventure!"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textSize="24dp"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"/>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="24dp"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeColor="#c0c0c0"
+                    app:hintTextColor="#333333">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/departureDropDown"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Departure"
+                        android:drawablePadding="8dp"
+                        android:paddingTop="16dp"
+                        android:textColor="#333333"
+                        android:fontFamily="@font/nunito_bold"
+                        android:textSize="18dp"
+                        android:inputType="none"
+                        android:drawableStart="@drawable/baseline_directions_bus_24"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="24dp"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeColor="#c0c0c0"
+                    app:hintTextColor="#333333">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/arrivalDropDown"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Arrival"
+                        android:padding="16dp"
+                        android:drawablePadding="8dp"
+                        android:textColor="#333333"
+                        android:textSize="18dp"
+                        android:inputType="none"
+                        android:fontFamily="@font/nunito_bold"
+                        android:drawableStart="@drawable/baseline_directions_bus_24"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/switchRoute"
+                    android:backgroundTint="#133ac2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/card_button"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="-120dp"
+                    android:src="@drawable/back_forth_arrow"
+                    android:scaleType="centerInside"
+                    />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="210dp"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeColor="#c0c0c0"
+                    app:hintTextColor="#333333"
+                    app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dateInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Date"
+                        android:drawablePadding="8dp"
+                        android:textColor="#333333"
+                        android:textSize="10dp"
+                        android:padding="16dp"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:fontFamily="@font/nunito_bold"
+                        android:drawableStart="@drawable/calendar"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="-60dp"
+                    android:layout_marginLeft="210dp"
+                    android:layout_marginRight="24dp"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeColor="#c0c0c0"
+                    app:hintTextColor="#333333"
+                    app:boxBackgroundColor="@android:color/transparent">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/passengersDropDown"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Passenger"
+                        android:padding="16dp"
+                        android:drawablePadding="8dp"
+                        android:textColor="#333333"
+                        android:textSize="10dp"
+                        android:inputType="none"
+                        android:fontFamily="@font/nunito_bold"
+                        android:drawableStart="@drawable/baseline_person_24"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/qrCodeButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="140dp"
+                    android:text="Generate Ticket"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/nunito_bold"
+                    android:textSize="14dp"
+                    android:textColor="#f9f9f9"
+                    android:gravity="center"
+                    android:backgroundTint="#384246"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/qr_code_"
+                    app:iconGravity="textStart"
+                    app:iconTint="#f9f9f9"
+                    app:iconPadding="8dp"
+                    app:iconSize="24dp" />
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</FrameLayout>

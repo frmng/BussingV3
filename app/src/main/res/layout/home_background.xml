@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="232dp"
+    android:id="@+id/homeBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="wrap_content"
+            android:layout_height="256dp"
+            android:src="@drawable/home_bus"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ImageCornerShape"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome back,"
+            android:textSize="24dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:textColor="#f9f9f9"
+            android:layout_marginTop="150dp"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Haerin"
+            android:textSize="38dp"
+            android:fontFamily="@font/nunito_bold"
+            android:textColor="#1B395B"
+            android:layout_marginTop="174dp"
+            android:layout_marginLeft="10dp"/>
+
+</FrameLayout>

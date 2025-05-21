@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_all"
+        android:title="All" />
+    <item
+        android:id="@+id/filter_active"
+        android:title="Active" />
+    <item
+        android:id="@+id/filter_inactive"
+        android:title="Inactive" />
+</menu>

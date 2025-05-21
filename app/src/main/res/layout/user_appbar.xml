@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/appbar_bg">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Image View -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/appBarProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/default_user1"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="center_vertical"
+                app:shapeAppearanceOverlay="@style/ProfileShape" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+                <!-- TextView -->
+                <TextView
+                    android:id="@+id/appbarUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kang Haerin"
+                    android:textColor="#f9f9f9"
+                    android:fontFamily="@font/nunito_bold"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"/>
+
+                <TextView
+                    android:id="@+id/appbarEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kanghaerinn@gmail.com"
+                    android:textColor="#c9c9c9"
+                    android:textSize="10dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

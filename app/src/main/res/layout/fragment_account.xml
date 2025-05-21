@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient3"
+    android:id="@+id/fragment_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.account.AccountFragment">
+
+    <!-- Background Image -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/account_bg"/>
+
+    <!-- Profile Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="44dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/userProfile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/default_user1"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/AccountProfileShape"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="Username"
+                android:textColor="#f9f9f9"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/userEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito"
+                android:text="username@gmail.com"
+                android:textColor="#f9f9f9"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- User ID Text -->
+    <Button
+        android:id="@+id/editProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Edit Profile"
+        android:textColor="#133AC1"
+        android:textSize="12sp"
+        android:textAllCaps="false"
+        android:backgroundTint="#FBF7F7"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="120dp"/>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="200dp">
+
+
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/ticketListButton"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="60dp"-->
+        <!--            android:layout_marginTop="8dp"-->
+        <!--            android:layout_marginLeft="20dp"-->
+        <!--            android:layout_marginRight="20dp"-->
+        <!--            android:drawableLeft="@drawable/ticket_solid"-->
+        <!--            android:text="           Ticket List"-->
+        <!--            android:gravity="center_vertical"-->
+        <!--            android:textColor="#133AC1"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:fontFamily="@font/nunito_bold"-->
+        <!--            android:textSize="14sp"-->
+        <!--            android:drawableRight="@drawable/chevron"-->
+        <!--            android:background="?attr/selectableItemBackground"-->
+        <!--            android:drawableTint="#133AC1"-->
+        <!--            />-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/walletButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawableLeft="@drawable/wallet"
+            android:text="           Wallet"
+            android:gravity="center_vertical"
+            android:textColor="#133AC1"
+            android:textAllCaps="false"
+            android:fontFamily="@font/nunito_bold"
+            android:textSize="14sp"
+            android:drawableRight="@drawable/chevron"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signOutButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:drawableLeft="@drawable/logout"
+            android:text="           Logout"
+            android:gravity="center_vertical"
+            android:textColor="#133AC1"
+            android:textAllCaps="false"
+            android:fontFamily="@font/nunito_bold"
+            android:textSize="14sp"
+            android:drawableRight="@drawable/chevron"
+            android:background="?attr/selectableItemBackground"
+            />
+
+
+    </LinearLayout>
+
+    <!-- Divider Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="272dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#87A0F8" />
+
+    <TextView
+        android:id="@+id/versionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text="Version"
+        android:textSize="14dp"
+        android:fontFamily="@font/nunito_semibold" />
+
+</FrameLayout>
