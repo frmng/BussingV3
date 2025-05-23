@@ -159,6 +159,12 @@ public class SignIn extends AppCompatActivity {
                         users.setName(firebaseUser.getDisplayName());
                         users.setProfile(firebaseUser.getPhotoUrl() != null ?
                                 firebaseUser.getPhotoUrl().toString() : "");
+                        users.setEmail(firebaseUser.getEmail());
+
+                        // Get current date and time in format: yyyy-MM-dd HH:mm:ss
+                        String createdAt = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                .format(new java.util.Date());
+                        users.setCreatedAt(createdAt);
 
                         FirebaseDatabase.getInstance()
                                 .getReference()
