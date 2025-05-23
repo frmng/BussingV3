@@ -107,83 +107,112 @@ public class TicketFragment extends Fragment {
                 return;
             }
 
-            String fromWhere = departureDropdown.getText().toString();
-            String toWhere = arrivalDropdown.getText().toString();
+            final String fromWhere = departureDropdown.getText().toString();
+            final String toWhere = arrivalDropdown.getText().toString();
 
             if (fromWhere.equalsIgnoreCase(toWhere)) {
                 Snackbar.make(v, "Departure and Arrival locations cannot be the same.", Snackbar.LENGTH_LONG).show();
                 return;
             }
 
-            String from = departureDropdown.getText().toString();
-            String to = arrivalDropdown.getText().toString();
-            String date = dateInput.getText().toString();
-            String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-            String ticketNumber = generateTicketNumber();
-            String passengerType = passengersDropdown.getText().toString().trim().toLowerCase();
+            final String from = fromWhere;
+            final String to = toWhere;
+            final String date = dateInput.getText().toString();
+            final String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            final String ticketNumber = generateTicketNumber();
+            final String passengerType = passengersDropdown.getText().toString().trim().toLowerCase();
 
-            // Determine base price (subtotal)
-            double basePrice = (from.equalsIgnoreCase("Bulakan") && to.equalsIgnoreCase("Cubao")) ? 105.0 : 120.0;
-            double discountRate = 0.0;
+            // Fetch price from Firestore first
+            FirebaseFirestore.getInstance()
+                    .collection("ScheduleDocumentsCollection")
+                    .whereEqualTo("from", from)
+                    .whereEqualTo("to", to)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        double basePrice;
 
-            switch (passengerType) {
-                case "student":
-                    discountRate = 0.2;
-                    break;
-                case "senior":
-                    discountRate = 0.3;
-                    break;
-                case "pwd":
-                    discountRate = 0.4;
-                    break;
-            }
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            try {
+                                Object priceObj = queryDocumentSnapshots.getDocuments().get(0).get("price");
+                                basePrice = Double.parseDouble(priceObj.toString());
+                            } catch (Exception e) {
+                                basePrice = 120.0;
+                            }
+                        } else {
+                            basePrice = 120.0;
+                        }
 
-            double discountAmount = basePrice * discountRate;
-            double finalPrice = basePrice - discountAmount;
+                        double discountRate = 0.0;
+                        switch (passengerType) {
+                            case "student":
+                                discountRate = 0.2;
+                                break;
+                            case "senior":
+                                discountRate = 0.3;
+                                break;
+                            case "pwd":
+                                discountRate = 0.4;
+                                break;
+                        }
 
-            showPaymentDialog(finalPrice, () -> {
-                ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("Generating QR Code...");
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+                        double discountAmount = basePrice * discountRate;
+                        double finalPrice = basePrice - discountAmount;
 
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                    String formattedDateTime = sdf.format(new Date());
+                        // Make these final for use in the inner lambda:
+                        final double finalBasePrice = basePrice;
+                        final double finalDiscountAmount = discountAmount;
+                        final double finalFinalPrice = finalPrice;
 
-                    String formattedPrice = String.format(Locale.getDefault(), "%.2f", finalPrice);
-                    String formattedDiscount = String.format(Locale.getDefault(), "%.2f", discountAmount);
-                    String formattedSubtotal = String.format(Locale.getDefault(), "%.2f", basePrice);
+                        showPaymentDialog(finalBasePrice, finalDiscountAmount, finalFinalPrice, () -> {
+                            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                            progressDialog.setMessage("Generating QR Code...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
 
-                    String ticketDetails = "From: " + from + "\nTo: " + to + "\nUser: " + userName +
-                            "\nDate: " + date + "\nTime: " + formattedDateTime +
-                            "\nPassenger: " + passengerType + "\nDiscount: ₱" + formattedDiscount +
-                            "\nSubtotal: ₱" + formattedSubtotal +
-                            "\nTotal Price: ₱" + formattedPrice +
-                            "\nTicket Number: " + ticketNumber;
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                                String formattedDateTime = sdf.format(new Date());
 
-                    Intent intent = new Intent(getActivity(), GenerateTicket.class);
-                    intent.putExtra("from", from);
-                    intent.putExtra("to", to);
-                    intent.putExtra("userName", userName);
-                    intent.putExtra("date", date);
-                    intent.putExtra("dateTime", formattedDateTime);
-                    intent.putExtra("passengerType", passengerType);
-                    intent.putExtra("discountAmount", formattedDiscount);
-                    intent.putExtra("price", formattedPrice);
-                    intent.putExtra("subtotal", formattedSubtotal);
-                    intent.putExtra("ticketDetails", ticketDetails);
-                    intent.putExtra("ticketNumber", ticketNumber);
+                                String formattedPrice = String.format(Locale.getDefault(), "%.2f", finalFinalPrice);
+                                String formattedDiscount = String.format(Locale.getDefault(), "%.2f", finalDiscountAmount);
+                                String formattedSubtotal = String.format(Locale.getDefault(), "%.2f", finalBasePrice);
 
-                    saveTicketToFirestore(from, to, userName, date, formattedDateTime, passengerType, formattedDiscount, formattedPrice, ticketNumber, formattedSubtotal);
+                                String ticketDetails = "From: " + from + "\nTo: " + to + "\nUser: " + userName +
+                                        "\nDate: " + date + "\nTime: " + formattedDateTime +
+                                        "\nPassenger: " + passengerType + "\nDiscount: ₱" + formattedDiscount +
+                                        "\nSubtotal: ₱" + formattedSubtotal +
+                                        "\nTotal Price: ₱" + formattedPrice +
+                                        "\nTicket Number: " + ticketNumber;
 
-                    passengersDropdown.setText("");
+                                Intent intent = new Intent(getActivity(), GenerateTicket.class);
+                                intent.putExtra("from", from);
+                                intent.putExtra("to", to);
+                                intent.putExtra("userName", userName);
+                                intent.putExtra("date", date);
+                                intent.putExtra("dateTime", formattedDateTime);
+                                intent.putExtra("passengerType", passengerType);
+                                intent.putExtra("discountAmount", formattedDiscount);
+                                intent.putExtra("price", formattedPrice);
+                                intent.putExtra("subtotal", formattedSubtotal);
+                                intent.putExtra("ticketDetails", ticketDetails);
+                                intent.putExtra("ticketNumber", ticketNumber);
 
-                    progressDialog.dismiss();
+                                saveTicketToFirestore(from, to, userName, date, formattedDateTime, passengerType, formattedDiscount, formattedPrice, ticketNumber, formattedSubtotal);
 
-                    startActivity(intent);
-                }, 2000);
-            });
+                                passengersDropdown.setText("");
+
+                                progressDialog.dismiss();
+
+                                startActivity(intent);
+                            }, 2000);
+                        });
+
+                    })
+                    .addOnFailureListener(e -> {
+                        Snackbar.make(v, "Failed to fetch price. Please try again.", Snackbar.LENGTH_LONG).show();
+                    });
+
+
         });
 
         return view;
@@ -229,7 +258,8 @@ public class TicketFragment extends Fragment {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving ticket", e));
     }
 
-    private void showPaymentDialog(double amountToPay, Runnable onPaymentSuccess) {
+    private void showPaymentDialog(double basePrice, double discountAmount, double totalPrice, Runnable onPaymentSuccess)
+    {
         if (!isAdded() || getActivity() == null) {
             Log.e("PaymentDialog", "Fragment is not attached, cannot show dialog.");
             return;
@@ -239,23 +269,6 @@ public class TicketFragment extends Fragment {
             String from = departureDropdown.getText().toString();
             String to = arrivalDropdown.getText().toString();
             String passengerType = passengersDropdown.getText().toString().trim().toLowerCase();
-            double basePrice = (from.equalsIgnoreCase("Bulakan") && to.equalsIgnoreCase("Cubao")) ? 105.0 : 120.0;
-
-            double discountRate = 0.0;
-            switch (passengerType) {
-                case "student":
-                    discountRate = 0.2;
-                    break;
-                case "senior":
-                    discountRate = 0.3;
-                    break;
-                case "pwd":
-                    discountRate = 0.4;
-                    break;
-            }
-
-            double discountAmount = basePrice * discountRate;
-            double totalPrice = basePrice - discountAmount;
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Ticket Invoice");

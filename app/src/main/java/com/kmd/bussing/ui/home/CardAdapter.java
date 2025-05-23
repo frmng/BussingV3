@@ -2,8 +2,8 @@ package com.kmd.bussing.ui.home;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +14,15 @@ import android.widget.TextView;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.view.ViewGroup;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -34,10 +33,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     private Context context;
     private ArrayList<CardLists> cardListsArrayList;
+    private FirebaseFirestore firestore;
 
     public CardAdapter(Context context, ArrayList<CardLists> cardListsArrayList) {
         this.context = context;
         this.cardListsArrayList = cardListsArrayList;
+        firestore = FirebaseFirestore.getInstance();
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +49,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         public CardViewHolder(View view) {
             super(view);
-            // Initialize the views
             cardView = view.findViewById(R.id.cardView);
             busNum = view.findViewById(R.id.busNumber);
             fromLoc = view.findViewById(R.id.fromLocation);
@@ -64,18 +64,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
     }
 
+    @NonNull
     @Override
-    public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //inflater
+    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_layout, parent, false);
         return new CardViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CardViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         CardLists cardLists = cardListsArrayList.get(position);
 
-        // Set the data for the current card
         holder.busNum.setText(cardLists.getBusNumber());
         holder.fromLoc.setText(cardLists.getFromLocation());
         holder.toWhereLoc.setText(cardLists.getToWhereLocation());
@@ -87,28 +86,56 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         holder.capacity.setText(String.valueOf(cardLists.getCapacity()));
         holder.status.setText(cardLists.getStatus());
 
-        //pricing logic
-        int basePrice = 105;
-        int regularPrice = 120;
-        int price;
+        // Fetch dynamic price from Firestore
+        firestore.collection("ScheduleDocumentsCollection")
+                .whereEqualTo("from", cardLists.getFromLocation())
+                .whereEqualTo("to", cardLists.getToWhereLocation())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Log.d("CardError", "Document found: " + doc.getId());
 
-        if("Bulakan".equalsIgnoreCase(cardLists.getFromLocation()) && "Cubao".equalsIgnoreCase(cardLists.getToWhereLocation())) {
-            price = basePrice;
+                            if (doc.contains("price")) {
+                                Object priceObj = doc.get("price");
 
-        } else {
-            price = regularPrice;
-        }
+                                if (priceObj != null) {
+                                    try {
+                                        int fetchedPrice = Integer.parseInt(priceObj.toString());
+                                        Log.d("CardError", "Fetched price: " + fetchedPrice);
+                                        holder.price.setText("₱" + fetchedPrice + ".00");
+                                    } catch (NumberFormatException e) {
+                                        Log.e("CardError", "Invalid number format in price field: " + priceObj, e);
+                                        holder.price.setText("₱ N/A");
+                                    }
+                                } else {
+                                    Log.w("CardError", "Price field is null");
+                                    holder.price.setText("₱ N/A");
+                                }
 
-        holder.price.setText("₱" + price+".00");
+                            } else {
+                                Log.w("CardError", "Document does not contain 'price' field");
+                                holder.price.setText("₱ N/A");
+                            }
+
+                            break; // Stop after the first match
+                        }
+                    } else {
+                        Log.w("CardError", "No matching documents found for price");
+                        holder.price.setText("₱ N/A");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("CardError", "Failed to fetch price", e);
+                    holder.price.setText("₱ N/A");
+                });
 
         LinearLayout detailsLayout = holder.itemView.findViewById(R.id.details);
         ImageView dropdownImage = holder.itemView.findViewById(R.id.dropdown);
 
-        // Initially hide details
         detailsLayout.setVisibility(View.GONE);
         detailsLayout.getLayoutParams().height = 0;
 
-        // Toggle dropdown
         holder.cardView.setOnClickListener(v -> {
             if (detailsLayout.getVisibility() == View.GONE) {
                 detailsLayout.setVisibility(View.VISIBLE);
@@ -148,10 +175,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         });
     }
 
-
     @Override
     public int getItemCount() {
         return cardListsArrayList.size();
     }
-
 }
