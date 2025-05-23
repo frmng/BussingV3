@@ -23,7 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import com.kmd.bussing.R;
@@ -120,14 +123,16 @@ public class SignUp extends AppCompatActivity {
 
     private void saveUserData(FirebaseUser firebaseUser, String email) {
         String userId = firebaseUser.getUid();
-        String name = firebaseUser.getDisplayName();
-        String profile = "defaultProfileUrl";
+        String userName = name.getText().toString();
+
+        String createdAt = new SimpleDateFormat("yyyy-MM-dd HH: mm:ss", Locale.getDefault()).format(new Date());
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("email", email);
         userData.put("id", userId);
-        userData.put("name", name);
-        userData.put("profile", profile);
+        userData.put("name", userName);
+        userData.put("createdAt", createdAt);
+
 
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
 
