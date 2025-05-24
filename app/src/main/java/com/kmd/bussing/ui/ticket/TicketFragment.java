@@ -2,9 +2,12 @@ package com.kmd.bussing.ui.ticket;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,15 +17,21 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
@@ -258,46 +267,57 @@ public class TicketFragment extends Fragment {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving ticket", e));
     }
 
-    private void showPaymentDialog(double basePrice, double discountAmount, double totalPrice, Runnable onPaymentSuccess)
-    {
+    private void showPaymentDialog(double basePrice, double discountAmount, double totalPrice, Runnable onPaymentSuccess) {
         if (!isAdded() || getActivity() == null) {
             Log.e("PaymentDialog", "Fragment is not attached, cannot show dialog.");
             return;
         }
 
         getActivity().runOnUiThread(() -> {
+            BottomSheetDialog dialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
+            dialog.setContentView(R.layout.dialog_invoice);
+
+            // Get and configure the bottom sheet
+            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.setBackgroundColor(Color.TRANSPARENT);
+
+                // Set height to half the screen, not full height
+                ViewGroup.LayoutParams params = bottomSheet.getLayoutParams();
+                bottomSheet.setLayoutParams(params);
+            }
+
+            // Set content
+            TextView routeText1 = dialog.findViewById(R.id.routeText1);
+            TextView routeText2 = dialog.findViewById(R.id.routeText2);
+            TextView passengerText = dialog.findViewById(R.id.passengerText);
+            TextView subtotalText = dialog.findViewById(R.id.subtotalText);
+            TextView discountText = dialog.findViewById(R.id.discountText);
+            TextView totalText = dialog.findViewById(R.id.totalText);
+
+            Button confirmBtn = dialog.findViewById(R.id.confirmButton);
+            MaterialButton cancelBtn = dialog.findViewById(R.id.cancelButton);
+
             String from = departureDropdown.getText().toString();
             String to = arrivalDropdown.getText().toString();
-            String passengerType = passengersDropdown.getText().toString().trim().toLowerCase();
+            String passengerType = passengersDropdown.getText().toString().trim();
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Ticket Invoice");
+            routeText1.setText(from);
+            routeText2.setText(to);
+            passengerText.setText("Passenger: " + (passengerType.isEmpty() ? "Regular" : passengerType));
+            subtotalText.setText(String.format("Subtotal: ₱%.2f", basePrice));
+            discountText.setText(String.format("Discount: ₱%.2f", discountAmount));
+            totalText.setText(String.format("Total: ₱%.2f", totalPrice));
 
-            String invoiceMessage = String.format(
-                    Locale.getDefault(),
-                    "Route: %s to %s\nPassenger: %s\n\nSubtotal: ₱%.2f\nDiscount: ₱%.2f\n\nTotal: ₱%.2f",
-                    from, to, passengerType.isEmpty() ? "Regular" : passengerType,
-                    basePrice, discountAmount, totalPrice
-            );
-
-            builder.setMessage(invoiceMessage);
-
-            builder.setPositiveButton("Confirm & Pay", (dialog, which) -> {
+            confirmBtn.setOnClickListener(v -> {
+                dialog.dismiss();
                 processPayment(totalPrice, onPaymentSuccess);
             });
 
-            builder.setNegativeButton("Cancel", (dialog, which) -> {
+            cancelBtn.setOnClickListener(v -> {
                 dialog.dismiss();
-
-                // clear dropdown focus and reset selection
-                passengersDropdown.dismissDropDown();
-                passengersDropdown.postDelayed(() -> {
-                    passengersDropdown.showDropDown();
-                }, 100);
             });
 
-
-            AlertDialog dialog = builder.create();
             dialog.show();
         });
     }

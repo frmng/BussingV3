@@ -137,7 +137,7 @@ public class UserWallet extends AppCompatActivity {
                     filterTransactionsBy("year");
                     break;
                 case 2:
-                    fetchTransactionsSeparately(); // show all
+                    fetchTransactionsSeparately();
                     break;
             }
         });
